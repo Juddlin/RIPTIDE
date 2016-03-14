@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Layout for Main Activity -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#93D2F0"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="wsuteams.riptide.SetupActivity"
+    tools:showIn="@layout/activity_setup">
+
+    <!-- Logo Layout -->
+    <ImageView
+        android:id="@+id/riptideLogo"
+        android:src="@drawable/riptide_word"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="467dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <!-- Finish Button -->
+    <Button
+        android:layout_height="70dp"
+        android:layout_width="140dp"
+        android:text="Finish"
+        android:id="@+id/finishButton"
+        android:layout_marginTop="42dp"
+        android:layout_below="@+id/passwordTextField"
+        android:layout_centerHorizontal="true" />
+
+    <!-- First Name Text Field -->
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textShortMessage|textMultiLine"
+        android:id="@+id/firstNameTextField"
+        android:layout_marginTop="108dp"
+        android:hint="First Name"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/finishButton"
+        android:layout_alignEnd="@+id/finishButton" />
+
+    <!-- Last Name Text Field -->
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textShortMessage|textMultiLine"
+        android:id="@+id/lastNameTextField"
+        android:hint="Last Name"
+        android:layout_below="@+id/firstNameTextField"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/firstNameTextField"
+        android:layout_alignEnd="@+id/firstNameTextField" />
+
+    <!-- Age Name Text Field -->
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textShortMessage|textMultiLine"
+        android:id="@+id/ageTextField"
+        android:hint="Age"
+        android:layout_below="@+id/lastNameTextField"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/lastNameTextField"
+        android:layout_alignEnd="@+id/lastNameTextField" />
+
+    <!-- ICS Text Field -->
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textShortMessage|textMultiLine"
+        android:id="@+id/icsTextField"
+        android:hint="ICS Role"
+        android:layout_below="@+id/ageTextField"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/ageTextField"
+        android:layout_alignEnd="@+id/ageTextField" />
+
+    <!-- Password Text Field -->
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textShortMessage|textMultiLine"
+        android:id="@+id/passwordTextField"
+        android:hint="Password"
+        android:layout_below="@+id/usernameTextField"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/finishButton"
+        android:layout_alignEnd="@+id/finishButton" />
+
+    <!-- Username Text Field -->
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textShortMessage|textMultiLine"
+        android:id="@+id/usernameTextField"
+        android:layout_below="@+id/icsTextField"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="Username"
+        android:layout_alignRight="@+id/finishButton"
+        android:layout_alignEnd="@+id/finishButton" />
+
+</RelativeLayout>
