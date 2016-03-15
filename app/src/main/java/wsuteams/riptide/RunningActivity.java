@@ -12,12 +12,13 @@ import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SeekBar;
-import android.os.Handler;
 import android.widget.TextView;
 
+import java.util.Timer;
+
 public class RunningActivity extends AppCompatActivity {
-    final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,21 +37,17 @@ public class RunningActivity extends AppCompatActivity {
             }
         });
 
-        Button beginButton = (Button) findViewById(R.id.beginButton);
-        beginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //handlerTask.run();
-                sendSMS();
-            }
-        });
-
-        SeekBar interval = (SeekBar) findViewById(R.id.timeIntervalSeekBar);
+        final SeekBar interval = (SeekBar) findViewById(R.id.timeIntervalSeekBar);
         interval.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 TextView label = (TextView) findViewById(R.id.timeIntervalLabel);
-                label.setText("Time Interval: " + (progress * 5) + " Minutes");
+                if (interval.getProgress() == 0) {
+                    label.setText("Time Interval: " + (progress + 1) + " Minutes");
+                } else {
+                    label.setText("Time Interval: " + (progress * 5) + " Minutes");
+                }
+
             }
 
             @Override
@@ -63,20 +60,39 @@ public class RunningActivity extends AppCompatActivity {
 
             }
         });
+
+        final Button beginButton = (Button) findViewById(R.id.beginButton);
+        final Timer myTimer = new Timer();
+        beginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (beginButton.getText().toString().equals("Begin")) {
+                    beginButton.setText("Stop");
+                    EditText email = (EditText) findViewById(R.id.serverTextField);
+                    MyTimerTask myTimerTask = new MyTimerTask(email.getText().toString());
+                    if (interval.getProgress() == 0) {
+                        myTimer.scheduleAtFixedRate(myTimerTask, 0, (1000 * 60 * (interval.getProgress() + 1)));
+                    } else {
+                        myTimer.scheduleAtFixedRate(myTimerTask, 0, (1000 * 60 * (interval.getProgress() * 5)));
+                    }
+                } else {
+                    beginButton.setText("Begin");
+                    myTimer.cancel();
+
+                    // Restart the running screen, fixes crash.
+                    Intent intent = new Intent(getApplicationContext(), RunningActivity.class);
+                    ComponentName cn = intent.getComponent();
+                    Intent mainIntent = IntentCompat.makeRestartActivityTask(cn);
+                    startActivity(mainIntent);
+                }
+            }
+        });
     }
 
-    Runnable handlerTask = new Runnable() {
-        @Override
-        public void run() {
-            sendSMS();
-            final SeekBar interval = (SeekBar) findViewById(R.id.timeIntervalSeekBar);
-            handler.postDelayed(handlerTask, interval.getProgress() * 5 * 60000);
-        }
-    };
-
-    private void sendSMS() {
-        SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage("6245", null, "goodman.27@hotmail.com (Subject) Test email from SMS", null, null);
-    }
+//    private void sendSMS() {
+//        SmsManager sms = SmsManager.getDefault();
+//        EditText email = (EditText) findViewById(R.id.serverTextField);
+//        sms.sendTextMessage("6245", null, email.getText() + " Test email from SMS", null, null);
+//    }
 
 }

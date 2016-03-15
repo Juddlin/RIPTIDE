@@ -76,7 +76,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Time Interval: 1 Minutes"
+        android:text="Time Interval: 5 Minutes"
         android:id="@+id/timeIntervalLabel"
         android:layout_above="@+id/timeIntervalSeekBar"
         android:layout_centerHorizontal="true" />
