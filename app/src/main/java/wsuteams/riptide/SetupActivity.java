@@ -24,9 +24,7 @@ public class SetupActivity extends AppCompatActivity {
         finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // -Save data entered into the text fields with global variables,
-                //  also needs to have access to these variables in the log in activity.
-                // -Need a listener for each text field so when clicked it clears it.
+                // Objects fot the text fields
                 EditText firstName = (EditText) findViewById(R.id.firstNameTextField);
                 EditText lastName = (EditText) findViewById(R.id.lastNameTextField);
                 EditText age = (EditText) findViewById(R.id.ageTextField);
@@ -34,6 +32,7 @@ public class SetupActivity extends AppCompatActivity {
                 EditText username = (EditText) findViewById(R.id.usernameTextField);
                 EditText password = (EditText) findViewById(R.id.passwordTextField);
 
+                // Make a key for all 6 fields of information for the apps Shared Preferences
                 editor.putString("key_firstName", firstName.getText().toString());
                 editor.putString("key_lastName", lastName.getText().toString());
                 editor.putString("key_age", age.getText().toString());
@@ -41,6 +40,7 @@ public class SetupActivity extends AppCompatActivity {
                 editor.putString("key_username", username.getText().toString());
                 editor.putString("key_password", password.getText().toString());
 
+                // Commit changes to the apps Shared Preferences
                 editor.commit();
                 finish();
             }

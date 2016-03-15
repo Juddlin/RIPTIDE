@@ -25,6 +25,7 @@ public class RunningActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_running);
 
+        // Button Listener to go back to the main screen intent to restart the entire process.
         Button logOffButton = (Button) findViewById(R.id.logOffButton);
         logOffButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,6 +38,7 @@ public class RunningActivity extends AppCompatActivity {
             }
         });
 
+        // Listener for the Seek Bar to change the label about it whenever the value changes.
         final SeekBar interval = (SeekBar) findViewById(R.id.timeIntervalSeekBar);
         interval.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -61,6 +63,10 @@ public class RunningActivity extends AppCompatActivity {
             }
         });
 
+        // Button listener for the begin button, when pressed it starts a timer that sends the
+        // SMS message at certain intervals, also changes the text on the button to "Stop".
+        // When the button is in the "Stop" form, when pressed again it simply restarts the current
+        // intent completly in order to avoid crashes and exceptions.
         final Button beginButton = (Button) findViewById(R.id.beginButton);
         final Timer myTimer = new Timer();
         beginButton.setOnClickListener(new View.OnClickListener() {
