@@ -41,7 +41,7 @@ public class RunningActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //handlerTask.run();
-                //sendSMS();
+                sendSMS();
             }
         });
 
