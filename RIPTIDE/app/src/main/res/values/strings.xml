@@ -1,9 +1,0 @@
-<resources>
-    <string name="app_name">RIPTIDE</string>
-    <string name="action_settings">Settings</string>
-    <string name="logInButton">Log In</string>
-    <string name="setupButton">Setup</string>
-    <string name="title_activity_setup">SetupActivity</string>
-    <string name="title_activity_log_in">LogInActivity</string>
-    <string name="title_activity_running">RunningActivity</string>
-</resources>
