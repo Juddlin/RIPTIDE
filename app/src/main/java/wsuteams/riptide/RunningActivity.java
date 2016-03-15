@@ -89,10 +89,4 @@ public class RunningActivity extends AppCompatActivity {
         });
     }
 
-//    private void sendSMS() {
-//        SmsManager sms = SmsManager.getDefault();
-//        EditText email = (EditText) findViewById(R.id.serverTextField);
-//        sms.sendTextMessage("6245", null, email.getText() + " Test email from SMS", null, null);
-//    }
-
 }
