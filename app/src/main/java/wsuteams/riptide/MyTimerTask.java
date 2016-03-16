@@ -1,7 +1,6 @@
 package wsuteams.riptide;
 
 import android.telephony.SmsManager;
-
 import java.util.TimerTask;
 
 /**
@@ -25,7 +24,7 @@ public class MyTimerTask extends TimerTask {
     @Override
     public void run() {
         SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage("6245", null, this.address + " Test email from SMS", null, null);
+        sms.sendTextMessage("6245", null, this.address + " Latitude: ..., Longitude: ..." , null, null);
     }
 
     /**
