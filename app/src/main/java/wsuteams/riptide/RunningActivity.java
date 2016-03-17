@@ -1,6 +1,7 @@
 package wsuteams.riptide;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.IntentCompat;
@@ -61,15 +62,17 @@ public class RunningActivity extends AppCompatActivity {
         // SMS message at certain intervals, also changes the text on the button to "Stop".
         // When the button is in the "Stop" form, when pressed again it simply restarts the current
         // intent completly in order to avoid crashes and exceptions.
+        // Created a Context object in order to pass into the MyTimerTask object for usage.
         final Button beginButton = (Button) findViewById(R.id.beginButton);
         final Timer myTimer = new Timer();
+        final Context mContext = this;
         beginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (beginButton.getText().toString().equals("Begin")) {
                     beginButton.setText("Stop");
                     EditText email = (EditText) findViewById(R.id.serverTextField);
-                    MyTimerTask myTimerTask = new MyTimerTask(email.getText().toString());
+                    MyTimerTask myTimerTask = new MyTimerTask(email.getText().toString(), mContext);
                     if (interval.getProgress() == 0) {
                         myTimer.scheduleAtFixedRate(myTimerTask, 0, (1000 * 60 * (interval.getProgress() + 1)));
                     } else {
