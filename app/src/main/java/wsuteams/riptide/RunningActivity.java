@@ -1,19 +1,28 @@
 package wsuteams.riptide;
 
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Handler;
 import android.os.Bundle;
 import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import java.util.Timer;
+import java.util.Calendar;
 
 public class RunningActivity extends AppCompatActivity {
+    private Location gpsLocation = null;
+    private Handler handler;
+    private LocationManager locationManager;
+    private static final int GPS_TIME_INTERVAL = 60000; // Get GPS location every 1 min
+    private static final int GPS_DISTANCE = 5; // Set the distance value in meter
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,29 +67,40 @@ public class RunningActivity extends AppCompatActivity {
             }
         });
 
-        // Button listener for the begin button, when pressed it starts a timer that sends the
+        // Button listener for the begin button, when pressed it starts a handler loop that sends the
         // SMS message at certain intervals, also changes the text on the button to "Stop".
         // When the button is in the "Stop" form, when pressed again it simply restarts the current
-        // intent completly in order to avoid crashes and exceptions.
-        // Created a Context object in order to pass into the MyTimerTask object for usage.
+        // intent completely in order to avoid crashes and exceptions.
         final Button beginButton = (Button) findViewById(R.id.beginButton);
-        final Timer myTimer = new Timer();
-        final Context mContext = this;
         beginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (beginButton.getText().toString().equals("Begin")) {
                     beginButton.setText("Stop");
-                    EditText email = (EditText) findViewById(R.id.serverTextField);
-                    MyTimerTask myTimerTask = new MyTimerTask(email.getText().toString(), mContext);
+                    final EditText email = (EditText) findViewById(R.id.serverTextField);
+                    final int HANDLER_DELAY;
                     if (interval.getProgress() == 0) {
-                        myTimer.scheduleAtFixedRate(myTimerTask, 0, (1000 * 60 * (interval.getProgress() + 1)));
+                        HANDLER_DELAY = (1000 * 60 * (interval.getProgress() + 1));
                     } else {
-                        myTimer.scheduleAtFixedRate(myTimerTask, 0, (1000 * 60 * (interval.getProgress() * 5)));
+                        HANDLER_DELAY = (1000 * 60 * (interval.getProgress() * 5));
                     }
+
+                    // Loop thread for getting the GPS
+                    handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            obtainLocation();
+                            SmsManager sms = SmsManager.getDefault();
+                            String myTime = java.text.DateFormat.getTimeInstance().format(Calendar.getInstance().getTime());
+                            sms.sendTextMessage("6245", null, email.getText().toString() + " Latitude: " + gpsLocation.getLatitude() + " Longitude: " + gpsLocation.getLongitude() + " Timestamp: " + myTime, null, null);
+                            handler.postDelayed(this, HANDLER_DELAY);
+                        }
+                    }, HANDLER_DELAY);
                 } else {
                     beginButton.setText("Begin");
-                    myTimer.cancel();
+
+                    // End the handler loop
+                    handler.removeCallbacksAndMessages(null);
 
                     // Restart the running screen, fixes crash.
                     Intent intent = new Intent(getApplicationContext(), RunningActivity.class);
@@ -92,4 +112,43 @@ public class RunningActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Method gets the GPS location and saves it to a Member Variable.
+     */
+    private void obtainLocation() {
+        if (locationManager == null)
+            locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            try {
+                gpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, GPS_TIME_INTERVAL, GPS_DISTANCE, GPSListener);
+            } catch (SecurityException e) {
+
+            }
+        }
+    }
+
+    /**
+     * Implementation for LocationListener that removes the most recent update
+     * to the GPS into the locationManager Member Variable.
+     */
+    private LocationListener GPSListener = new LocationListener(){
+        public void onLocationChanged(Location location) {
+            try{
+                locationManager.removeUpdates(GPSListener); // remove this listener
+            } catch (SecurityException e) {
+
+            }
+        }
+
+        public void onProviderDisabled(String provider) {
+        }
+
+        public void onProviderEnabled(String provider) {
+        }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+    };
 }

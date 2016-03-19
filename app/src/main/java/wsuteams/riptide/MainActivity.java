@@ -2,6 +2,7 @@ package wsuteams.riptide;
 
 
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,6 +25,11 @@ public class MainActivity extends AppCompatActivity {
             showGPSDisabledAlertToUser();
         }
 
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if(!mBluetoothAdapter.isEnabled()){
+            showBlueToothDisabledAlertToUser();
+        }
+
         // Button listener for going to the setup intent
         Button setupButton = (Button) findViewById(R.id.setupButton);
         setupButton.setOnClickListener(new View.OnClickListener() {
@@ -37,10 +43,32 @@ public class MainActivity extends AppCompatActivity {
         Button logInButton = (Button) findViewById(R.id.logInButton);
         logInButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), LogInActivity.class));
             }
         });
+    }
+
+    /**
+     * Method will force the user to turn on Bluetooth Services.
+     */
+    private void showBlueToothDisabledAlertToUser(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Bluetooth is disabled on your device, it must be enabled for RIPTIDE to function.");
+        alertDialogBuilder.setCancelable(false);
+
+        // Open the Settings intent to turn on the Bluetooth
+        alertDialogBuilder.setPositiveButton("Go to settings page to enable Bluetooth.", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent callBluetoothSettingIntent = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+                startActivity(callBluetoothSettingIntent);
+            }
+        });
+
+        // Create and show the alert
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
     }
 
     /**
