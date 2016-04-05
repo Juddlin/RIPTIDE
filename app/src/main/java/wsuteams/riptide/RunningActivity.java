@@ -2,6 +2,7 @@ package wsuteams.riptide;
 
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -28,12 +29,22 @@ public class RunningActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_running);
+        final SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        final SharedPreferences.Editor editor = pref.edit();
+
+        // Fill the server field on create
+        final EditText serverTextField = (EditText) findViewById(R.id.serverTextField);
+        serverTextField.setText(pref.getString("key_server", ""));
 
         // Button Listener to go back to the main screen intent to restart the entire process.
         Button logOffButton = (Button) findViewById(R.id.logOffButton);
         logOffButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Save the server address for later usage
+                editor.putString("key_server", serverTextField.getText().toString());
+                editor.commit();
+
                 // Reset the application back to Main Activity one user logs off.
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 ComponentName cn = intent.getComponent();

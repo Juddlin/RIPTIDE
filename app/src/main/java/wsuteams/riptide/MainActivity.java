@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
             showGPSDisabledAlertToUser();
         }
 
+        // Check if Bluetooth is enabled
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(!mBluetoothAdapter.isEnabled()){
             showBlueToothDisabledAlertToUser();
