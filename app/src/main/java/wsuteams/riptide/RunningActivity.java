@@ -8,7 +8,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Handler;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
@@ -17,7 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -56,18 +54,23 @@ public class RunningActivity extends AppCompatActivity {
     private BluetoothGattCharacteristic heartRateCharacteristic;
     private int theHeartRate = -1;
 
+    // Generic variables
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+    private TextView serverTextField;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_running);
-        final SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-        final SharedPreferences.Editor editor = pref.edit();
+        pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        editor = pref.edit();
 
         // Initialize text view for showing connected device
         heartRateStatusView = (TextView) findViewById(R.id.heartRateMonitorStatusTextView);
 
         // Fill the server field on create
-        final EditText serverTextField = (EditText) findViewById(R.id.serverTextField);
+        serverTextField = (EditText) findViewById(R.id.serverTextField);
         serverTextField.setText(pref.getString("key_server", ""));
 
         // Button Listener to go back to the main screen intent to restart the entire process.
@@ -78,6 +81,14 @@ public class RunningActivity extends AppCompatActivity {
                 // Save the server address for later usage
                 editor.putString("key_server", serverTextField.getText().toString());
                 editor.commit();
+
+                // Disconnect the device
+                if (mBluetoothGatt != null) {
+                    mBluetoothGatt.disconnect();
+                    mBluetoothGatt = null;
+                    connected = false;
+                    finalDevice = null;
+                }
 
                 // Reset the application back to Main Activity one user logs off.
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -174,12 +185,16 @@ public class RunningActivity extends AppCompatActivity {
     @Override
     protected void onStop(){
         super.onStop();
-        if(mBluetoothGatt != null){
-            mBluetoothGatt.disconnect();
-            mBluetoothGatt = null;
-            connected = false;
-            finalDevice = null;
-        }
+//        if(mBluetoothGatt != null){
+//            mBluetoothGatt.disconnect();
+//            mBluetoothGatt = null;
+//            connected = false;
+//            finalDevice = null;
+//        }
+
+        // Save the server address for later usage
+        editor.putString("key_server", serverTextField.getText().toString());
+        editor.commit();
     }
 
     /**
