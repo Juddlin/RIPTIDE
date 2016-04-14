@@ -102,8 +102,9 @@ public class RunningActivity extends AppCompatActivity {
                         public void run() {
                             obtainLocation();
                             SmsManager sms = SmsManager.getDefault();
-                            String myTime = java.text.DateFormat.getTimeInstance().format(Calendar.getInstance().getTime());
-                            sms.sendTextMessage("6245", null, email.getText().toString() + " Latitude: " + gpsLocation.getLatitude() + " Longitude: " + gpsLocation.getLongitude() + " Timestamp: " + myTime, null, null);
+                            double latitude = gpsLocation.getLatitude();
+                            double longitude = gpsLocation.getLongitude();
+                            sms.sendTextMessage("6245", null, email.getText().toString() + " Latitude: " + formatLatLong(latitude) + " Longitude: " + formatLatLong(longitude), null, null);
                             handler.postDelayed(this, HANDLER_DELAY);
                         }
                     }, HANDLER_DELAY);
@@ -121,6 +122,42 @@ public class RunningActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    /**
+     * Method returns a formatted double in the form of a String truncated to 10 digits, 0 padded if necessary.
+     */
+    private String formatLatLong(double value){
+        String formatted = "";
+
+        if(value >= 100 || value <= -100){
+            formatted = String.format("%03.7f", value);
+        }else if((value < 100 && value >= 10) || ( value > -100 && value <= -10)){
+            formatted = String.format("%02.8f", value);
+        }else{
+            formatted = String.format("%01.9f", value);
+        }
+
+        return formatted;
+    }
+
+    /**
+     * Method returns a formatted int in the form of a String truncated to 3 digits, 0 padded if necessary.
+     */
+    private String formatHeart(int value){
+        String formatted = "";
+
+        if(value >= 1000){
+            value = 999;
+            formatted = String.format("%03d", value);
+        }else if(value < 0){
+            value = 0;
+            formatted = String.format("%03d", value);
+        }else{
+            formatted = String.format("%03d", value);
+        }
+
+        return formatted;
     }
 
     /**
