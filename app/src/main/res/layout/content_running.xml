@@ -49,16 +49,6 @@
         android:layout_marginTop="130dp" />
 
     <!-- Heart Rate Monitor Switch -->
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:switchMinWidth="56dp"
-        android:text="Heart Rate Monitor: "
-        android:id="@+id/heartRateMonitorSwitch"
-        android:checked="false"
-        android:layout_marginBottom="49dp"
-        android:layout_above="@+id/logOffButton"
-        android:layout_centerHorizontal="true" />
 
     <!-- Time Interval Seek Bar -->
     <SeekBar
@@ -79,26 +69,17 @@
         android:text="Time Interval: 1 Minutes"
         android:id="@+id/timeIntervalLabel"
         android:layout_above="@+id/timeIntervalSeekBar"
-        android:layout_centerHorizontal="true" />
-
-    <!-- Heart Rate Monitor Indicator Button -->
-    <ToggleButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Heart Rate Monitor Status"
-        android:id="@+id/heartRateMonitorStatusSignalButton"
-        android:checked="false"
-        android:layout_above="@+id/heartRateMonitorSwitch"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:editable="false" />
 
     <!-- Heart Rate Monitor Status Label -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Heart Rate Monitor Status"
-        android:id="@+id/heartRateMonitorStatusLabel"
-        android:layout_above="@+id/heartRateMonitorStatusSignalButton"
+        android:text="------"
+        android:id="@+id/heartRateMonitorStatusTextView"
+        android:layout_below="@+id/heartRateScanButton"
         android:layout_centerHorizontal="true" />
 
     <!-- Begin Button -->
@@ -110,5 +91,14 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Scan"
+        android:id="@+id/heartRateScanButton"
+        android:layout_marginTop="45dp"
+        android:layout_below="@+id/timeIntervalSeekBar"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
